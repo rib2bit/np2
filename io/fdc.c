@@ -7,7 +7,7 @@
 #include	"cpucore.h"
 #include	"pccore.h"
 #include	"iocore.h"
-#include	"fdd/fddfile.h"
+#include	"DiskImage/fddfile.h"
 
 enum {
 	FDC_DMACH2HD	= 2,
@@ -51,7 +51,7 @@ static BOOL fdc_isfdcinterrupt(void) {
 
 REG8 DMACCALL fdc_dmafunc(REG8 func) {
 
-//	TRACEOUT(("fdc_dmafunc = %d", func));
+	TRACEOUT(("FDC\tfdc_dmafunc = %d", func));
 	switch(func) {
 		case DMAEXT_START:
 			return(1);
@@ -98,18 +98,37 @@ void fdcsend_error7(void) {
 
 void fdcsend_success7(void) {
 
+TRACEOUT(("fdcsend_success7"));
+TRACEOUT(("\tfdc.stat[fdc.us] %02x:[%08x]", fdc.us, fdc.stat[fdc.us]));
 	fdc.tc = 0;
 	fdc.event = FDCEVENT_BUFSEND;
 	fdc.bufp = 0;
 	fdc.bufcnt = 7;
+#if 0	//	変更(Kai1)
 	fdc.buf[0] = (fdc.hd << 2) | fdc.us;
 	fdc.buf[1] = 0;
 	fdc.buf[2] = 0;
+#else
+	if (fdd_fdcresult() == FALSE) {
+		fdc.buf[0] = (fdc.hd << 2) | fdc.us;
+		fdc.buf[1] = 0;
+		fdc.buf[2] = 0;
+	}
+	else {
+		//	FDイメージファイルがFDCリザルトコードを持っている場合は
+		//	(fdc.statに設定しているはずなので)そちらを設定
+		fdc.buf[0] = (fdc.hd << 2) | fdc.us | (UINT8)(fdc.stat[fdc.us] >>  0);
+		fdc.buf[1] = (UINT8)(fdc.stat[fdc.us] >>  8);
+		fdc.buf[2] = (UINT8)(fdc.stat[fdc.us] >> 16);
+	}
+#endif
 	fdc.buf[3] = fdc.C;
 	fdc.buf[4] = fdc.H;
 	fdc.buf[5] = fdc.R;
 	fdc.buf[6] = fdc.N;
 	fdc.status = FDCSTAT_RQM | FDCSTAT_CB | FDCSTAT_DIO;
+TRACEOUT(("\tbuf %02x %02x %02x %02x %02x %02x %02x",
+		fdc.buf[0], fdc.buf[1], fdc.buf[2], fdc.buf[3], fdc.buf[4], fdc.buf[5], fdc.buf[6]));
 	fdc.stat[fdc.us] = 0;										// ver0.29
 	fdc_dmaready(0);
 	dmac_check();
@@ -188,7 +207,7 @@ static void FDC_Invalid(void) {							// cmd: xx
 	fdc.status = FDCSTAT_RQM | FDCSTAT_CB | FDCSTAT_DIO;
 }
 
-#if 0
+#if 1
 static void FDC_ReadDiagnostic(void) {					// cmd: 02
 
 	switch(fdc.event) {
@@ -249,7 +268,7 @@ static void FDC_SenseDeviceStatus(void) {				// cmd: 04
 			else {
 				fdc.buf[0] |= 0x80;
 			}
-//			TRACEOUT(("FDC_SenseDeviceStatus %.2x", fdc.buf[0]));
+			TRACEOUT(("FDC\tFDC_SenseDeviceStatus %.2x", fdc.buf[0]));
 			fdc.event = FDCEVENT_BUFSEND;
 			fdc.bufcnt = 1;
 			fdc.bufp = 0;
@@ -418,6 +437,8 @@ static void FDC_SenceintStatus(void) {					// cmd: 08
 
 	int		i;
 
+	TRACEOUT(("FDC\tFDC_SenceintStatus"));
+
 	fdc.event = FDCEVENT_BUFSEND;
 	fdc.bufp = 0;
 	fdc.bufcnt = 0;
@@ -430,7 +451,7 @@ static void FDC_SenceintStatus(void) {					// cmd: 08
 			fdc.buf[1] = fdc.treg[fdc.us];
 			fdc.bufcnt = 2;
 			fdc.stat[fdc.us] = 0;
-//			TRACEOUT(("fdc stat - %d [%.2x]", fdc.us, fdc.buf[0]));
+			TRACEOUT(("\tfdc stat - %d [%.2x]", fdc.us, fdc.buf[0]));
 		}
 		else {
 			for (; i<4; i++) {
@@ -439,7 +460,7 @@ static void FDC_SenceintStatus(void) {					// cmd: 08
 					fdc.buf[1] = fdc.treg[i];
 					fdc.bufcnt = 2;
 					fdc.stat[i] = 0;
-//					TRACEOUT(("fdc stat - %d [%.2x]", i, fdc.buf[0]));
+					TRACEOUT(("\tfdc stat - %d [%.2x]", i, fdc.buf[0]));
 					break;
 				}
 			}
@@ -481,20 +502,20 @@ static void FDC_WriteID(void) {							// cmd: 0d
 
 	switch(fdc.event) {
 		case FDCEVENT_CMDRECV:
-//			TRACE_("FDC_WriteID FDCEVENT_CMDRECV", 0);
+			TRACEOUT(("FDC\tFDC_WriteID FDCEVENT_CMDRECV"));
 			get_hdus();
 			fdc.N = fdc.cmds[1];
 			fdc.sc = fdc.cmds[2];
 			fdc.gpl = fdc.cmds[3];
 			fdc.d = fdc.cmds[4];
 			if (FDC_DriveCheck(TRUE)) {
-//				TRACE_("FDC_WriteID FDC_DriveCheck", 0);
+				TRACEOUT(("FDC\tFDC_WriteID FDC_DriveCheck"));
 				if (fdd_formatinit()) {
-//					TRACE_("FDC_WriteID fdd_formatinit", 0);
+					TRACEOUT(("FDC\tFDC_WriteID fdd_formatinit"));
 					fdcsend_error7();
 					break;
 				}
-//				TRACE_("FDC_WriteID FDCEVENT_BUFRECV", 0);
+				TRACEOUT(("FDC\tFDC_WriteID FDCEVENT_BUFRECV"));
 				fdc.event = FDCEVENT_BUFRECV;
 				fdc.bufcnt = 4;
 				fdc.bufp = 0;
@@ -562,7 +583,7 @@ static void FDC_Seek(void) {							// cmd: 0f
 	fdc.status = FDCSTAT_RQM;
 }
 
-#if 0
+#if 1
 static void FDC_ScanEqual(void) {						// cmd: 11, 19, 1d
 
 	switch(fdc.event) {
@@ -599,7 +620,7 @@ static const FDCOPE FDC_Ope[0x20] = {
 				FDC_Invalid,
 				FDC_Seek,
 				FDC_Invalid,					// 10
-				FDC_Invalid,			// FDC_ScanEqual,
+				FDC_ScanEqual,	//	FDC_Invalid,	//	変更(Kai1)
 				FDC_Invalid,
 				FDC_Invalid,
 				FDC_Invalid,
@@ -607,11 +628,11 @@ static const FDCOPE FDC_Ope[0x20] = {
 				FDC_Invalid,
 				FDC_Invalid,
 				FDC_Invalid,
-				FDC_Invalid,			// FDC_ScanEqual,
+				FDC_ScanEqual,	//	FDC_Invalid,	//	変更(Kai1)
 				FDC_Invalid,
 				FDC_Invalid,
 				FDC_Invalid,
-				FDC_Invalid,			// FDC_ScanEqual,
+				FDC_ScanEqual,	//	FDC_Invalid,	//	変更(Kai1)
 				FDC_Invalid,
 				FDC_Invalid};
 
@@ -626,10 +647,11 @@ static void fdcstatusreset(void) {
 
 void DMACCALL fdc_datawrite(REG8 data) {
 
+		TRACEOUT(("FDC\tfdc_datawrite %04x", fdc.bufp));
 //	if ((fdc.status & (FDCSTAT_RQM | FDCSTAT_DIO)) == FDCSTAT_RQM) {
 		switch(fdc.event) {
 			case FDCEVENT_BUFRECV:
-//				TRACE_("write", fdc.bufp);
+				TRACEOUT(("\twrite(FDCEVENT_BUFRECV) %04x", fdc.bufp));
 				fdc.buf[fdc.bufp++] = data;
 				if ((!(--fdc.bufcnt)) || (fdc.tc)) {
 					fdc.status &= ~FDCSTAT_RQM;
@@ -638,6 +660,7 @@ void DMACCALL fdc_datawrite(REG8 data) {
 				break;
 
 			case FDCEVENT_CMDRECV:
+				TRACEOUT(("\tcommand(FDCEVENT_CMDRECV) %04x", fdc.cmdp));
 				fdc.cmds[fdc.cmdp++] = data;
 				if (!(--fdc.cmdcnt)) {
 					fdc.status &= ~FDCSTAT_RQM;
@@ -646,6 +669,7 @@ void DMACCALL fdc_datawrite(REG8 data) {
 				break;
 
 			default:
+				TRACEOUT(("\tdata?(default) %04x", data));
 				fdc.cmd = data;
 				get_mtmfsk();
 				if (FDCCMD_TABLE[data & 0x1f]) {
@@ -669,6 +693,7 @@ REG8 DMACCALL fdc_dataread(void) {
 //									== (FDCSTAT_RQM | FDCSTAT_DIO)) {
 		switch(fdc.event) {
 			case FDCEVENT_BUFSEND:
+				TRACEOUT(("FDC\tfdc_dataread:FDCEVENT_BUFSEND"));
 				fdc.lastdata = fdc.buf[fdc.bufp++];
 				if (!(--fdc.bufcnt)) {
 					fdc.event = FDCEVENT_NEUTRAL;
@@ -677,6 +702,7 @@ REG8 DMACCALL fdc_dataread(void) {
 				break;
 
 			case FDCEVENT_BUFSEND2:
+				TRACEOUT(("FDC\tfdc_dataread:FDCEVENT_BUFSEND2"));
 				if (fdc.bufcnt) {
 					fdc.lastdata = fdc.buf[fdc.bufp++];
 					fdc.bufcnt--;
@@ -700,6 +726,7 @@ REG8 DMACCALL fdc_dataread(void) {
 				break;
 		}
 //	}
+	TRACEOUT(("FDC\tfdc_dataread ret[%02x]", fdc.lastdata));
 	return(fdc.lastdata);
 }
 
@@ -708,7 +735,7 @@ REG8 DMACCALL fdc_dataread(void) {
 
 static void IOOUTCALL fdc_o92(UINT port, REG8 dat) {
 
-//	TRACEOUT(("fdc out %.2x %.2x [%.4x:%.4x]", port, dat, CPU_CS, CPU_IP));
+	TRACEOUT(("FDC\tOUT %.2x %.2x [%.4x:%.4x]", port, dat, CPU_CS, CPU_IP));
 
 	if (((port >> 4) ^ fdc.chgreg) & 1) {
 		return;
@@ -720,7 +747,7 @@ static void IOOUTCALL fdc_o92(UINT port, REG8 dat) {
 
 static void IOOUTCALL fdc_o94(UINT port, REG8 dat) {
 
-//	TRACEOUT(("fdc out %.2x %.2x [%.4x:%.4x]", port, dat, CPU_CS, CPU_IP));
+	TRACEOUT(("FDC\tOUT %.2x %.2x [%.4x:%.4x]", port, dat, CPU_CS, CPU_IP));
 
 	if (((port >> 4) ^ fdc.chgreg) & 1) {
 		return;
@@ -735,8 +762,8 @@ static void IOOUTCALL fdc_o94(UINT port, REG8 dat) {
 
 static REG8 IOINPCALL fdc_i90(UINT port) {
 
-//	TRACEOUT(("fdc in %.2x %.2x [%.4x:%.4x]", port, fdc.status,
-//															CPU_CS, CPU_IP));
+	TRACEOUT(("FDC\tIN  %.2x %.2x [%.4x:%.4x]", port, fdc.status,
+															CPU_CS, CPU_IP));
 
 	if (((port >> 4) ^ fdc.chgreg) & 1) {
 		return(0xff);
@@ -758,7 +785,7 @@ static REG8 IOINPCALL fdc_i92(UINT port) {
 	else {
 		ret = fdc.lastdata;
 	}
-//	TRACEOUT(("fdc in %.2x %.2x [%.4x:%.4x]", port, ret, CPU_CS, CPU_IP));
+	TRACEOUT(("FDC\tIN  %.2x %.2x [%.4x:%.4x]", port, ret, CPU_CS, CPU_IP));
 	return(ret);
 }
 
@@ -792,6 +819,7 @@ static REG8 IOINPCALL fdc_i94(UINT port) {
 
 static void IOOUTCALL fdc_obe(UINT port, REG8 dat) {
 
+	TRACEOUT(("FDC\tOUT %.2x %.2x [%.4x:%.4x]", port, dat, CPU_CS, CPU_IP));
 	fdc.chgreg = dat;
 	if (fdc.chgreg & 2) {
 		CTRL_FDMEDIA = DISKTYPE_2HD;
@@ -804,8 +832,12 @@ static void IOOUTCALL fdc_obe(UINT port, REG8 dat) {
 
 static REG8 IOINPCALL fdc_ibe(UINT port) {
 
+	REG8	ret;
+	ret = (fdc.chgreg & 3) | 8;
+	TRACEOUT(("FDC\tIN  %.2x %.2x [%.4x:%.4x]", port, ret, CPU_CS, CPU_IP));
 	(void)port;
-	return((fdc.chgreg & 3) | 8);
+	return(ret);
+//	return((fdc.chgreg & 3) | 8);
 }
 
 static void IOOUTCALL fdc_o4be(UINT port, REG8 dat) {
@@ -819,8 +851,12 @@ static void IOOUTCALL fdc_o4be(UINT port, REG8 dat) {
 
 static REG8 IOINPCALL fdc_i4be(UINT port) {
 
+	REG8	ret;
+	ret = fdc.rpm[(fdc.reg144 >> 5) & 3] | 0xf0;
+	TRACEOUT(("FDC\tIN  %.2x %.2x [%.4x:%.4x]", port, ret, CPU_CS, CPU_IP));
 	(void)port;
-	return(fdc.rpm[(fdc.reg144 >> 5) & 3] | 0xf0);
+	return(ret);
+//	return(fdc.rpm[(fdc.reg144 >> 5) & 3] | 0xf0);
 }
 
 

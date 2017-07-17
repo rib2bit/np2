@@ -465,8 +465,8 @@ BRESULT scrnmng_create(UINT8 scrnmode) {
 	}
 	SetWindowLong(g_hWndMain, GWL_STYLE, winstyle);
 	SetWindowLong(g_hWndMain, GWL_EXSTYLE, winstyleex);
-
-	if (DirectDrawCreate(NULL, &ddraw.ddraw1, NULL) != DD_OK) {
+	
+	if (DirectDrawCreate(np2oscfg.emuddraw ? (LPGUID)DDCREATE_EMULATIONONLY : NULL, &ddraw.ddraw1, NULL) != DD_OK) {
 		goto scre_err;
 	}
 	ddraw.ddraw1->QueryInterface(IID_IDirectDraw2, (void **)&ddraw2);

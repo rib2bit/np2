@@ -4,7 +4,8 @@
 #include	"sysmng.h"
 #include	"cpucore.h"
 #include	"pccore.h"
-#include	"fdd/fddfile.h"
+//#include	"fdd/fddfile.h"
+#include	"DiskImage/fddfile.h"	/*	Kai2	*/
 
 	UINT	sys_updates;
 

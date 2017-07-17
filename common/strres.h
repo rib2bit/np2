@@ -63,6 +63,25 @@ extern const OEMCHAR str_biosrom[];
 extern const OEMCHAR str_sasirom[];
 extern const OEMCHAR str_scsirom[];
 
+/*	Å´Ç±Ç±Ç©ÇÁ(Kaiî≈í«â¡ï™)	*/
+/*	í«â¡(kai1)	*/
+extern const OEMCHAR str_dcp[];
+extern const OEMCHAR str_dcu[];
+extern const OEMCHAR str_nfd[];
+extern const OEMCHAR str_vfdd[];
+
+extern const OEMCHAR str_cue[];
+extern const OEMCHAR str_ccd[];
+extern const OEMCHAR str_cdm[];
+extern const OEMCHAR str_mds[];
+extern const OEMCHAR str_nrg[];
+extern const OEMCHAR str_iso[];
+
+/*	í«â¡(kai2)	*/
+extern const OEMCHAR str_mhlt1[];
+extern const OEMCHAR str_mhlt2[];
+extern const OEMCHAR str_mhlt3[];
+/*	Å™Ç±Ç±Ç‹Ç≈(Kaiî≈í«â¡ï™)	*/
 #ifdef __cplusplus
 }
 #endif

@@ -199,6 +199,7 @@
 			/>
 			<Tool
 				Name="NASM"
+				AdditionalOptions="-I.\x86\ -I..\i286x\ -I..\io\x86\"
 				IncludePaths=".\x86\;..\i286x\;..\io\x86\"
 			/>
 			<Tool
@@ -220,6 +221,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories=".\;.\x86;..\;..\common;..\i286x;..\mem;..\io;..\cbus;..\vram;..\sound;..\generic;..\zlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
@@ -640,6 +642,38 @@
 				<File
 					RelativePath="..\fdd\fdd_d88.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\fdd\fdd_mtr.c"
@@ -648,10 +682,74 @@
 				<File
 					RelativePath="..\fdd\fdd_xdf.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\fdd\fddfile.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\fdd\newdisk.c"
@@ -2261,6 +2359,78 @@
 					RelativePath="..\zlib\zutil.c"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="DiskImage"
+				>
+				<File
+					RelativePath="..\DiskImage\cddfile.c"
+					>
+				</File>
+				<File
+					RelativePath="..\DiskImage\fddfile.c"
+					>
+				</File>
+				<Filter
+					Name="FD"
+					>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_bkdsk.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_d88.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_dcp.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_mahalito.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_nfd.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_vfdd.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_xdf.c"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="CD"
+					>
+					<File
+						RelativePath="..\DiskImage\CD\cdd_ccd.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\CD\cdd_cue.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\CD\cdd_iso.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\CD\cdd_mds.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\CD\cdd_nrg.c"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="HD"
+					>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter

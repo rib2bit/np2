@@ -520,3 +520,69 @@ void DOSIOCALL file_setseparator(OEMCHAR* lpPathName, int cchPathName)
 	lpPathName[pos + 1] = '\\';
 	lpPathName[pos + 2] = '\0';
 }
+
+/*	CD/DVDイメージファイルアクセス用に必要に迫られて…	*/
+/*	ToDo:他の部分との整合性の向上	*/
+/*		(32bit整数と64bit整数が混在しまくってるので警告いぱーい)	*/
+
+INT64 DOSIOCALL file_seeki64(FILEH handle, INT64 pointer, int method)
+{
+
+	LARGE_INTEGER	li;
+
+	li.QuadPart = pointer;
+
+	li.LowPart = SetFilePointer(handle, li.LowPart, &li.HighPart, method);
+
+	if (li.LowPart == INVALID_SET_FILE_POINTER && GetLastError() != NO_ERROR) {
+		li.QuadPart = -1;
+	}
+
+	return(li.QuadPart);
+}
+
+INT64 DOSIOCALL file_getsizei64(FILEH handle)
+{
+	LARGE_INTEGER	li;
+
+	if (GetFileSizeEx(handle, &li) == 0) {
+		li.QuadPart = -1;
+	}
+
+	return(li.QuadPart);
+}
+
+/*	FDイメージ書き込みの際、ファイルサイズが変化(増加)する	*/
+/*	パターンが増えてきたので共通関数化(Kai2)				*/
+BRESULT DOSIOCALL file_insert(FILEH handle, long offset, long size, const void* buf)
+{
+	UINT32	size_org;
+	UINT32	length;
+	UINT	bsize;
+	UINT	rsize;
+	UINT8	tmp[0x0400];
+
+	if (handle == FILEH_INVALID) {
+		return(FAILURE);
+	}
+
+	size_org = file_getsize(handle);
+
+	length = size_org - offset;
+
+	while(length) {
+		if (length >= (long)(sizeof(tmp))) {
+			bsize = sizeof(tmp);
+		}
+		else {
+			bsize = length;
+		}
+		length -= bsize;
+		file_seek(handle, offset + length, 0);
+		rsize = file_read(handle, tmp, bsize);
+		file_seek(handle, offset + length + bsize, 0);
+		file_write(handle, tmp, rsize);
+	}
+
+	return(SUCCESS);
+}

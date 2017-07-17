@@ -16,15 +16,15 @@
 #include "strres.h"
 #include "parts.h"
 #include "np2.h"
-#include "misc\WndProc.h"
-#include "debuguty\viewer.h"
+#include "misc/WndProc.h"
+#include "debuguty/viewer.h"
 #include "np2arg.h"
 #include "dosio.h"
-#include "misc\tstring.h"
+#include "misc/tstring.h"
 #include "commng.h"
-#include "commng\cmmidiin32.h"
+#include "commng/cmmidiin32.h"
 #if defined(SUPPORT_VSTi)
-#include "commng\vsthost\vsteditwnd.h"
+#include "commng/vsthost/vsteditwnd.h"
 #endif	// defined(SUPPORT_VSTi)
 #include "joymng.h"
 #include "mousemng.h"
@@ -35,8 +35,8 @@
 #include "ini.h"
 #include "menu.h"
 #include "winloc.h"
-#include "dialog\np2class.h"
-#include "dialog\dialog.h"
+#include "dialog/np2class.h"
+#include "dialog/dialog.h"
 #include "cpucore.h"
 #include "pccore.h"
 #include "statsave.h"
@@ -48,9 +48,11 @@
 #include "beep.h"
 #include "s98.h"
 #include "fdd/diskdrv.h"
-#include "fdd/fddfile.h"
+//#include "fdd/fddfile.h"
+#include "DiskImage/fddfile.h"	/*	Kai2	*/
 #if defined(SUPPORT_IDEIO)
 #include "fdd/sxsi.h"
+#include "DiskImage/cddfile.h"
 #endif	// defined(SUPPORT_IDEIO)
 #include "timing.h"
 #include "keystat.h"
@@ -64,7 +66,7 @@
 #include "cputype.h"
 #endif
 #if defined(SUPPORT_DCLOCK)
-#include "subwnd\dclock.h"
+#include "subwnd/dclock.h"
 #endif
 #include "recvideo.h"
 
@@ -84,7 +86,8 @@ static	TCHAR		szClassName[] = _T("NP2-MainWindow");
 		NP2OSCFG	np2oscfg = {
 						OEMTEXT(PROJECTNAME) OEMTEXT(PROJECTSUBNAME),
 						OEMTEXT("NP2"),
-						CW_USEDEFAULT, CW_USEDEFAULT, 1, 1, 0, 0, 0, 1, 0, 0,
+//						CW_USEDEFAULT, CW_USEDEFAULT, 1, 1, 0, 0, 0, 1, 0, 0,
+						CW_USEDEFAULT, CW_USEDEFAULT, 1, 1, 0, 0, 0, 1, 0, 0, 8,		//	WindowSizeを追加(Kai1)
 						0, 0, KEY_UNKNOWN, 0,
 						0, 0, 0, {1, 2, 2, 1},
 						{5, 0, 0x3e, 19200,
@@ -107,12 +110,14 @@ static	TCHAR		szClassName[] = _T("NP2-MainWindow");
 						CSoundMng::kDSound3, TEXT(""),
 
 #if defined(SUPPORT_VSTi)
-						TEXT("%ProgramFiles%\\Roland\\Sound Canvas VA\\SOUND Canvas VA.dll")
+						TEXT("%ProgramFiles%\\Roland\\Sound Canvas VA\\SOUND Canvas VA.dll"),
 #endif	// defined(SUPPORT_VSTi)
+						0
 					};
 
 		OEMCHAR		fddfolder[MAX_PATH];
 		OEMCHAR		hddfolder[MAX_PATH];
+		OEMCHAR		cddfolder[MAX_PATH];	//	CDフォルダ保存用(Kai1)
 		OEMCHAR		bmpfilefolder[MAX_PATH];
 		OEMCHAR		modulefile[MAX_PATH];
 
@@ -1054,8 +1059,107 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	UINT		update;
 	HWND		subwin;
 	WINLOCEX	wlex;
+	int		files;				//	Kai1追加
+	OEMCHAR	fname[MAX_PATH];	//	Kai1追加
+const OEMCHAR	*ext;			//	Kai1追加
 
 	switch (msg) {
+//	イメージファイルのＤ＆Ｄに対応(Kai1)
+		case WM_DROPFILES:
+   			files = DragQueryFile((HDROP)wParam, (UINT)-1, NULL, 0);
+			if (files == 1) {
+				/*	単一ファイルドロップ	*/
+				DragQueryFile((HDROP)wParam, 0, fname, NELEMENTS(fname));
+				do {
+#if defined(SUPPORT_IDEIO)
+					//	CDイメージ？
+					if (isCDImage(fname)) {
+						diskdrv_setsxsi(0x02, fname);
+						break;
+					}
+#endif	//	SUPPORT_IDEIO
+					//	HDイメージ？
+					ext = file_getext(fname);
+					if ((!file_cmpname(ext, str_hdi)) ||
+						(!file_cmpname(ext, str_thd)) ||
+						(!file_cmpname(ext, str_nhd))) {
+						if (GetKeyState(VK_CONTROL) & 0x8000) {
+							diskdrv_setsxsi(0x01, fname);
+						}
+						else {
+							diskdrv_setsxsi(0x00, fname);
+						}
+						break;
+					}
+					if (!file_cmpname(ext, str_hdd)) {
+						if (GetKeyState(VK_CONTROL) & 0x8000) {
+							diskdrv_setsxsi(0x21, fname);
+						}
+						else {
+							diskdrv_setsxsi(0x20, fname);
+						}
+						break;
+					}
+					//	FDイメージ…？
+					if (GetKeyState(VK_CONTROL) & 0x8000) {
+						diskdrv_setfdd(0x01, fname, 0);
+						toolwin_setfdd(1, fname);	/*	toolwindowの更新(Kai2)	*/
+					}
+					else {
+						diskdrv_setfdd(0x00, fname, 0);
+						toolwin_setfdd(0, fname);	/*	toolwindowの更新(Kai2)	*/
+					}
+				} while (FALSE);
+			}
+			else if (files >= 2) {
+				/*	複数ファイルドロップ	*/
+				REG8	hddrv_IDE = 0x00;
+				REG8	hddrv_SCSI = 0x20;
+				REG8	fddrv = 0x00;
+				UINT8	i;
+				for (i = 0; i < files; i++) {
+					DragQueryFile((HDROP)wParam, i, fname, NELEMENTS(fname));
+#if defined(SUPPORT_IDEIO)
+					//	CDイメージ？
+					if (isCDImage(fname)) {
+						diskdrv_setsxsi(0x02, fname);
+						continue;
+					}
+#endif	//	SUPPORT_IDEIO
+					//	HDイメージ？
+					ext = file_getext(fname);
+					if ((!file_cmpname(ext, str_hdi)) ||
+						(!file_cmpname(ext, str_thd)) ||
+						(!file_cmpname(ext, str_nhd))) {
+						if (hddrv_IDE <= 0x01) {
+							diskdrv_setsxsi(hddrv_IDE, fname);
+							hddrv_IDE++;
+						}
+						continue;
+					}
+					if (!file_cmpname(ext, str_hdd)) {
+						if (hddrv_SCSI <= 0x23) {
+							diskdrv_setsxsi(hddrv_SCSI, fname);
+							hddrv_SCSI++;
+						}
+						continue;
+					}
+					//	FDイメージ…？
+					if (fddrv <= 0x02) {
+						diskdrv_setfdd(fddrv, fname, 0);
+						toolwin_setfdd(fddrv, fname);	/*	toolwindowの更新(Kai2)	*/
+						fddrv++;
+					}
+				}
+			}
+			DragFinish((HDROP)wParam);
+			if (GetKeyState(VK_SHIFT) & 0x8000) {
+				//	Shiftキーが押下されていればリセット
+				pccore_cfgupdate();
+				pccore_reset();
+			}
+			break;
+//
 		case WM_CREATE:
 			np2class_wmcreate(hWnd);
 			np2class_windowtype(hWnd, np2oscfg.wintype);
@@ -1143,6 +1247,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 						!(GetWindowLong(g_hWndMain, GWL_STYLE) & WS_MINIMIZE))
 					{
 						scrnmng_setmultiple((int)(wParam - IDM_SCRNMUL));
+//	WindowSizeを保存および書き出し用にフラグ更新(Kai1)
+						np2oscfg.SCRN_MUL = (UINT8)(wParam - IDM_SCRNMUL);
+						update |= SYS_UPDATECFG;
+//
 					}
 					break;
 
@@ -1290,6 +1398,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				np2class_enablemenu(g_hWndMain, TRUE);
 				return(DefWindowProc(hWnd, WM_SYSKEYDOWN, VK_F10, lParam));
 			}
+			//	追加(Kai1)
+			if (wParam == VK_APPS) {
+				np2oscfg.NOWAIT = np2oscfg.NOWAIT ^ 1;
+				sysmng_update(SYS_UPDATECFG);
+			}
+			//
 			if ((wParam == VK_F12) && (!np2oscfg.F12COPY)) {
 				mousemng_toggle(MOUSEPROC_SYSTEM);
 				np2oscfg.MOUSE_SW = !np2oscfg.MOUSE_SW;
@@ -1629,6 +1743,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 						np2oscfg.winx, np2oscfg.winy, 640, 400,
 						NULL, NULL, hInstance, NULL);
 	g_hWndMain = hWnd;
+
+	DragAcceptFiles(hWnd, TRUE);	//	イメージファイルのＤ＆Ｄに対応(Kai1)
+
 	scrnmng_initialize();
 
 	ShowWindow(hWnd, nCmdShow);
@@ -1682,6 +1799,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 	if (np2oscfg.MOUSE_SW) {										// ver0.30
 		mousemng_enable(MOUSEPROC_SYSTEM);
 	}
+
+	scrnmng_setmultiple(np2oscfg.SCRN_MUL);	/*	読み込んだWindowSizeを反映(Kai1)	*/
 
 	commng_initialize();
 	sysmng_initialize();

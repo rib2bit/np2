@@ -13,7 +13,8 @@
 #include "iocore.h"
 #include "lio/lio.h"
 #include "vram.h"
-#include "fdd/fddfile.h"
+//#include "fdd/fddfile.h"
+#include "DiskImage/fddfile.h"	/*	Kai2	*/
 #include "fdd/fdd_mtr.h"
 #include "fdfmt.h"
 #include "dosio.h"

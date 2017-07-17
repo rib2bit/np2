@@ -54,3 +54,23 @@ const OEMCHAR str_biosrom[] = OEMTEXT("bios.rom");
 const OEMCHAR str_sasirom[] = OEMTEXT("sasi.rom");
 const OEMCHAR str_scsirom[] = OEMTEXT("scsi.rom");
 
+/*	«‚±‚±‚©‚ç(Kai”Å’Ç‰Á•ª)	*/
+/*	’Ç‰Á(kai1)	*/
+const OEMCHAR str_dcp[]		= OEMTEXT("dcp");
+const OEMCHAR str_dcu[]		= OEMTEXT("dcu");
+const OEMCHAR str_nfd[]		= OEMTEXT("nfd");
+const OEMCHAR str_vfdd[]	= OEMTEXT("fdd");
+
+const OEMCHAR str_cue[]		= OEMTEXT("cue");	/*	CUEƒV[ƒg										*/
+const OEMCHAR str_ccd[]		= OEMTEXT("ccd");	/*	CloneCD‚É‘Î‰‚µ‚Ä‚İ‚é							*/
+const OEMCHAR str_cdm[]		= OEMTEXT("cdm");	/*	CD Manipulator‚É‘Î‰‚µ‚Ä‚İ‚é					*/
+const OEMCHAR str_mds[]		= OEMTEXT("mds");	/*	Media Descriptor(Alcohol 52%“™)‚É‘Î‰‚µ‚Ä‚İ‚é	*/
+const OEMCHAR str_nrg[]		= OEMTEXT("nrg");	/*	Nero‚É‘Î‰‚µ‚Ä‚İ‚é								*/
+const OEMCHAR str_iso[]		= OEMTEXT("iso");
+
+/*	’Ç‰Á(kai2)	*/
+const OEMCHAR str_mhlt1[]	= OEMTEXT("2hd");
+const OEMCHAR str_mhlt2[]	= OEMTEXT("2dd");
+const OEMCHAR str_mhlt3[]	= OEMTEXT("2d");
+/*	ª‚±‚±‚Ü‚Å(Kai”Å’Ç‰Á•ª)	*/
+

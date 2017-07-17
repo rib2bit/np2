@@ -449,9 +449,11 @@ static const PFTBL s_IniItems[] =
 	PFMAX("paddingx", PFRO_SINT32,		&np2oscfg.paddingx,		32),
 	PFMAX("paddingy", PFRO_SINT32,		&np2oscfg.paddingy,		32),
 	PFVAL("Win_Snap", PFTYPE_BOOL,		&np2oscfg.WINSNAP),
+	PFVAL("SCRN_MUL", PFTYPE_UINT8,		&np2oscfg.SCRN_MUL),	//	WindowSizeを保持するために追加(Kai1)
 
 	PFSTR("FDfolder", PFTYPE_STR,		fddfolder),
 	PFSTR("HDfolder", PFTYPE_STR,		hddfolder),
+	PFSTR("CDfolder", PFTYPE_STR,		cddfolder),				//	HDフォルダとCDフォルダを分離(Kai1)
 	PFSTR("bmap_Dir", PFTYPE_STR,		bmpfilefolder),
 	PFSTR("fontfile", PFTYPE_STR,		np2cfg.fontfile),
 	PFSTR("biospath", PFRO_STR,			np2cfg.biospath),
@@ -472,6 +474,9 @@ static const PFTBL s_IniItems[] =
 
 	PFSTR("HDD1FILE", PFTYPE_STR,		np2cfg.sasihdd[0]),
 	PFSTR("HDD2FILE", PFTYPE_STR,		np2cfg.sasihdd[1]),
+#if defined(SUPPORT_IDEIO)
+	PFSTR("HDD3FILE", PFTYPE_STR,		np2cfg.sasihdd[2]),		//	CDイメージのファイル名を保存(Kai1)
+#endif
 #if defined(SUPPORT_SCSI)
 	PFSTR("SCSIHDD0", PFTYPE_STR,		np2cfg.scsihdd[0]),
 	PFSTR("SCSIHDD1", PFTYPE_STR,		np2cfg.scsihdd[1]),
@@ -601,6 +606,8 @@ static const PFTBL s_IniItems[] =
 #if defined(SUPPORT_VSTi)
 	PFSTR("VSTiFile", PFRO_STR,			np2oscfg.szVSTiFile),
 #endif	// defined(SUPPORT_VSTi)
+	
+	PFVAL("EMUDDRAW", PFRO_BOOL,		&np2oscfg.emuddraw), // 最近はEMULATIONONLYにした方速かったりする（特にピクセル操作する場合とか）
 
 	PFVAL("I286SAVE", PFRO_BOOL,		&np2oscfg.I286SAVE)
 };

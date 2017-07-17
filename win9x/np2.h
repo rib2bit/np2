@@ -36,6 +36,7 @@ typedef struct {
 	UINT8	WINSNAP;
 	UINT8	NOWAIT;
 	UINT8	DRAW_SKIP;
+	UINT8	SCRN_MUL;	//	WindowSizeを保持するために追加(Kai1)
 
 	UINT8	background;
 	UINT8	DISPCLK;
@@ -83,6 +84,8 @@ typedef struct {
 #if defined(SUPPORT_VSTi)
 	TCHAR	szVSTiFile[MAX_PATH];
 #endif	// defined(SUPPORT_VSTi)
+
+	UINT8	emuddraw; // DirectDraw Emulation Only
 } NP2OSCFG;
 
 
@@ -125,6 +128,7 @@ extern	int			mmxflag;
 extern	OEMCHAR		modulefile[MAX_PATH];
 extern	OEMCHAR		fddfolder[MAX_PATH];
 extern	OEMCHAR		hddfolder[MAX_PATH];
+extern	OEMCHAR		cddfolder[MAX_PATH];	//	CDフォルダ保存用(Kai1)
 extern	OEMCHAR		bmpfilefolder[MAX_PATH];
 
 void np2active_renewal(void);

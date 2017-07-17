@@ -133,7 +133,13 @@ enum {
 	FTYPE_HDI		= FTYPEID('.','H','D','I'),
 	FTYPE_HDD		= FTYPEID('.','H','D','D'),
 	FTYPE_S98		= FTYPEID('.','S','9','8'),
-	FTYPE_MIMPI		= FTYPEID('M','I','M','P')
+	FTYPE_MIMPI		= FTYPEID('M','I','M','P'),
+/*	Å´Ç±Ç±Ç©ÇÁ(Kaiî≈í«â¡ï™)	*/
+	FTYPE_DCP		= FTYPEID('.','D','C','P'),	/*	í«â¡(kai1)	*/
+	FTYPE_NFD		= FTYPEID('.','N','F','D'),	/*	í«â¡(kai1)	*/
+	FTYPE_VFDD		= FTYPEID('.','F','D','D'),	/*	í«â¡(kai1)	*/
+	FTYPE_MHLT		= FTYPEID('.','2','H','D'),	/*	í«â¡(kai2)	*/
+/*	Å™Ç±Ç±Ç‹Ç≈(Kaiî≈í«â¡ï™)	*/
 };
 
 

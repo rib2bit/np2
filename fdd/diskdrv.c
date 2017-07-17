@@ -9,7 +9,8 @@
 #include "sysmng.h"
 #include "pccore.h"
 #include "iocore.h"
-#include "fddfile.h"
+//#include "fddfile.h"
+#include "DiskImage/fddfile.h"	/*	Kai2	*/
 #include "sxsi.h"
 
 #define DISK_DELAY	20			/*!< Delay 0.4sec */

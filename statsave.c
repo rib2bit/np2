@@ -30,7 +30,8 @@
 #include "sound.h"
 #include "fmboard.h"
 #include "beep.h"
-#include "fdd/fddfile.h"
+//#include "fdd/fddfile.h"
+#include "DiskImage/fddfile.h"	/*	Kai2	*/
 #include "fdd/fdd_mtr.h"
 #include "fdd/sxsi.h"
 #include "font/font.h"

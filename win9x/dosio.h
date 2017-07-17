@@ -132,6 +132,10 @@ void DOSIOCALL file_cutext(OEMCHAR* lpPathName);
 void DOSIOCALL file_cutseparator(OEMCHAR* lpPathName);
 void DOSIOCALL file_setseparator(OEMCHAR* lpPathName, int cchPathName);
 
+/*	INT64‘Î‰ž”Å(Kai1)	*/
+INT64 DOSIOCALL file_seeki64(FILEH handle, INT64 pointer, int method);
+INT64 DOSIOCALL file_getsizei64(FILEH handle);
+
 #ifdef __cplusplus
 }
 #endif

@@ -58,7 +58,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\;.\x86;..\;..\common;..\i386c;..\mem;..\io;..\cbus;..\vram;..\sound;..\generic;..\zlib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;SUPPORT_PC9821"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;SUPPORT_PC9821;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -140,7 +140,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\;.\x64;..\;..\common;..\i386c;..\mem;..\io;..\cbus;..\vram;..\sound;..\generic;..\zlib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;SUPPORT_PC9821"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;SUPPORT_PC9821;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -202,6 +202,7 @@
 			/>
 			<Tool
 				Name="NASM"
+				AdditionalOptions="-I.\x86\ -I..\i286x\ -I..\io\x86\"
 				IncludePaths=".\x86\;..\i386c\x86\;..\io\x86\"
 			/>
 			<Tool
@@ -223,6 +224,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories=".\;.\x86;..\;..\common;..\i386c;..\mem;..\io;..\cbus;..\vram;..\sound;..\generic;..\zlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;SUPPORT_PC9821"
 				RuntimeLibrary="0"
@@ -309,7 +311,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories=".\;.\x64;..\;..\common;..\i386c;..\mem;..\io;..\cbus;..\vram;..\sound;..\generic;..\zlib"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;SUPPORT_PC9821"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;SUPPORT_PC9821;"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -646,6 +648,38 @@
 				<File
 					RelativePath="..\fdd\fdd_d88.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\fdd\fdd_mtr.c"
@@ -654,10 +688,74 @@
 				<File
 					RelativePath="..\fdd\fdd_xdf.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\fdd\fddfile.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\fdd\newdisk.c"
@@ -1872,6 +1970,78 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="DiskImage"
+				>
+				<File
+					RelativePath="..\DiskImage\cddfile.c"
+					>
+				</File>
+				<File
+					RelativePath="..\DiskImage\fddfile.c"
+					>
+				</File>
+				<Filter
+					Name="FD"
+					>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_bkdsk.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_d88.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_dcp.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_mahalito.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_nfd.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_vfdd.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\FD\fdd_xdf.c"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="CD"
+					>
+					<File
+						RelativePath="..\DiskImage\CD\cdd_ccd.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\CD\cdd_cue.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\CD\cdd_iso.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\CD\cdd_mds.c"
+						>
+					</File>
+					<File
+						RelativePath="..\DiskImage\CD\cdd_nrg.c"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="HD"
+					>
+				</Filter>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="ヘッダー ファイル"
@@ -2124,6 +2294,13 @@
 				<File
 					RelativePath="..\fdd\sxsicd.h"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\fdd\sxsihdd.h"
@@ -3105,7 +3282,31 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\resources\fddseek.wav"
+				>
+			</File>
+			<File
+				RelativePath=".\resources\fddseek1.wav"
+				>
+			</File>
+			<File
+				RelativePath=".\resources\nekop2.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\resources\np2.ico"
+				>
+			</File>
+			<File
 				RelativePath=".\resources\932\np2.rc"
+				>
+			</File>
+			<File
+				RelativePath=".\resources\np2debug.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\resources\np2tool.bmp"
 				>
 			</File>
 		</Filter>
