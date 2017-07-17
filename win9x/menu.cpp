@@ -375,6 +375,13 @@ void xmenu_update(HMENU hMenu)
 	CheckMenuItem(hMenu, IDM_JASTSOUND, MF_BYCOMMAND | MFCHECK(np2oscfg.jastsnd));
 	CheckMenuItem(hMenu, IDM_SEEKSND, MF_BYCOMMAND | MFCHECK(np2cfg.MOTOR));
 
+	CheckMenuItem(hMenu, IDM_EXTSNDOUT, MF_BYCOMMAND | MFCHECK(np2oscfg.extsndout));
+	CheckMenuItem(hMenu, IDM_EXTSNDOUT_FM, MF_BYCOMMAND | MFCHECK(np2oscfg.extsndout_fm));
+	CheckMenuItem(hMenu, IDM_EXTSNDOUT_PSG, MF_BYCOMMAND | MFCHECK(np2oscfg.extsndout_ssg));
+	CheckMenuItem(hMenu, IDM_EXTSNDOUT_ADPCM, MF_BYCOMMAND | MFCHECK(np2oscfg.extsndout_adpcm));
+	CheckMenuItem(hMenu, IDM_EXTSNDOUT_RHYTHM, MF_BYCOMMAND | MFCHECK(np2oscfg.extsndout_rhythm));
+	CheckMenuItem(hMenu, IDM_EXTSNDOUT_MUTEINT, MF_BYCOMMAND | MFCHECK(np2oscfg.extsndout_muteint));
+
 	// Device-Memory
 	const UINT8 EXTMEM = np2cfg.EXTMEM;
 	CheckMenuItem(hMenu, IDM_MEM640, MF_BYCOMMAND | MFCHECK(EXTMEM == 0));

@@ -842,6 +842,18 @@ BEGIN
             MENUITEM "&AMD-98",                     IDM_AMD98
             MENUITEM "&JastSound",                  IDM_JASTSOUND
             MENUITEM SEPARATOR
+            POPUP "&External Sound Chip"
+            BEGIN
+                MENUITEM "Enable",                  IDM_EXTSNDOUT
+                MENUITEM SEPARATOR
+                MENUITEM "FM",                      IDM_EXTSNDOUT_FM
+                MENUITEM "PSG",                     IDM_EXTSNDOUT_PSG
+                MENUITEM "ADPCM",                   IDM_EXTSNDOUT_ADPCM
+                MENUITEM "Rhythm",                  IDM_EXTSNDOUT_RHYTHM
+                MENUITEM SEPARATOR
+                MENUITEM "Mute Sound Emulation",    IDM_EXTSNDOUT_MUTEINT
+            END
+            MENUITEM SEPARATOR
             MENUITEM "&Seek sound",                 IDM_SEEKSND
         END
         POPUP "M&emory"

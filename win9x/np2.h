@@ -83,6 +83,13 @@ typedef struct {
 #if defined(SUPPORT_VSTi)
 	TCHAR	szVSTiFile[MAX_PATH];
 #endif	// defined(SUPPORT_VSTi)
+
+	UINT8	extsndout;
+	UINT8	extsndout_muteint;
+	UINT8	extsndout_fm;
+	UINT8	extsndout_ssg;
+	UINT8	extsndout_adpcm;
+	UINT8	extsndout_rhythm;
 } NP2OSCFG;
 
 

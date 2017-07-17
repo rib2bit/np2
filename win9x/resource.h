@@ -527,7 +527,12 @@
 #define IDM_TRACE_ENABLE                43103
 #define IDM_TRACE_FILEOUT               43104
 #define IDM_TRACE_CLEAR                 43105
-
+#define IDM_EXTSNDOUT                   55000
+#define IDM_EXTSNDOUT_FM                55010
+#define IDM_EXTSNDOUT_PSG               55011
+#define IDM_EXTSNDOUT_ADPCM             55012
+#define IDM_EXTSNDOUT_RHYTHM            55013
+#define IDM_EXTSNDOUT_MUTEINT           55001
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

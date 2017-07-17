@@ -13,6 +13,7 @@
 #include "generic/keydisp.h"
 #include "externalchipmanager.h"
 #include "externalopna.h"
+#include "np2.h"
 
 static void writeRegister(POPNA opna, UINT nAddress, REG8 cData);
 static void writeExtendedRegister(POPNA opna, UINT nAddress, REG8 cData);
@@ -154,25 +155,33 @@ void opna_bind(POPNA opna)
 	}
 
 	CExternalOpna* pExt = reinterpret_cast<CExternalOpna*>(opna->userdata);
-	if (pExt == NULL)
-	{
-		IExternalChip::ChipType nChipType = IExternalChip::kYM2203;
-		if (cCaps & OPNA_HAS_EXTENDEDFM)
+	if (np2oscfg.extsndout) {
+		if (pExt == NULL)
 		{
-			nChipType = IExternalChip::kYMF288;
-			nClock *= 2;
-			if (cCaps & OPNA_HAS_ADPCM)
+			IExternalChip::ChipType nChipType = IExternalChip::kYM2203;
+			if (cCaps & OPNA_HAS_EXTENDEDFM)
 			{
-				nChipType = IExternalChip::kYM2608;
+				nChipType = IExternalChip::kYMF288;
+				nClock *= 2;
+				if (cCaps & OPNA_HAS_ADPCM)
+				{
+					nChipType = IExternalChip::kYM2608;
+				}
+				else if (!(cCaps & (OPNA_HAS_PSG | OPNA_HAS_RHYTHM)))
+				{
+					nChipType = IExternalChip::kYM3438;
+				}
 			}
-			else if (!(cCaps & (OPNA_HAS_PSG | OPNA_HAS_RHYTHM)))
-			{
-				nChipType = IExternalChip::kYM3438;
-			}
+			pExt = static_cast<CExternalOpna*>(CExternalChipManager::GetInstance()->GetInterface(nChipType, nClock));
+			opna->userdata = reinterpret_cast<INTPTR>(pExt);
 		}
-		pExt = static_cast<CExternalOpna*>(CExternalChipManager::GetInstance()->GetInterface(nChipType, nClock));
-		opna->userdata = reinterpret_cast<INTPTR>(pExt);
 	}
+	else
+	{
+		pExt = NULL;
+		opna->userdata = NULL;
+	}
+
 	if (pExt)
 	{
 		pExt->Reset();
@@ -188,13 +197,13 @@ void opna_bind(POPNA opna)
 	}
 	restore(opna);
 
-	if (pExt)
+	if (pExt && np2oscfg.extsndout_muteint)
 	{
 		if ((cCaps & OPNA_HAS_PSG) && (pExt->HasPsg()))
 		{
 			cCaps &= ~OPNA_HAS_PSG;
 		}
-		if ((cCaps & OPNA_HAS_RHYTHM) && (pExt->HasRhythm()))
+	 	if ((cCaps & OPNA_HAS_RHYTHM) && (pExt->HasRhythm()))
 		{
 			cCaps &= ~OPNA_HAS_RHYTHM;
 		}
@@ -302,14 +311,12 @@ static void writeRegister(POPNA opna, UINT nAddress, REG8 cData)
 		if (cCaps & OPNA_HAS_PSG)
 		{
 			keydisp_psg(opna->s.reg, nAddress);
-			if ((!pExt) || (!pExt->HasPsg()))
-			{
-				psggen_setreg(&opna->psg, nAddress, cData);
-			}
-			else
+			if (pExt && pExt->HasPsg() && np2oscfg.extsndout_ssg)
 			{
 				pExt->WriteRegister(nAddress, cData);
 			}
+
+			psggen_setreg(&opna->psg, nAddress, cData);
 		}
 	}
 	else if (nAddress < 0x20)
@@ -326,14 +333,12 @@ static void writeRegister(POPNA opna, UINT nAddress, REG8 cData)
 						break;
 				}
 			}
-			if ((!pExt) || (!pExt->HasRhythm()))
-			{
-				rhythm_setreg(&opna->rhythm, nAddress, cData);
-			}
-			else
+			if (pExt && pExt->HasRhythm() && np2oscfg.extsndout_rhythm)
 			{
 				pExt->WriteRegister(nAddress, cData);
 			}
+
+			rhythm_setreg(&opna->rhythm, nAddress, cData);
 		}
 	}
 	else if (nAddress < 0x30)
@@ -357,14 +362,12 @@ static void writeRegister(POPNA opna, UINT nAddress, REG8 cData)
 				return;
 			}
 
-			if (!pExt)
-			{
-				opngen_keyon(&opna->opngen, cChannel, cData);
-			}
-			else
+			if (pExt && np2oscfg.extsndout_fm)
 			{
 				pExt->WriteRegister(nAddress, cData);
 			}
+
+			opngen_keyon(&opna->opngen, cChannel, cData);
 			keydisp_opnakeyon(opna->s.reg, cData);
 		}
 		else if (nAddress == 0x27)
@@ -374,18 +377,16 @@ static void writeRegister(POPNA opna, UINT nAddress, REG8 cData)
 				opna_settimer(opna, cData);
 			}
 
-			if (pExt)
+			if (pExt && np2oscfg.extsndout_fm)
 			{
 				pExt->WriteRegister(nAddress, cData);
 			}
-			else
-			{
-				opna->opngen.opnch[2].extop = cData & 0xc0;
-			}
+
+			opna->opngen.opnch[2].extop = cData & 0xc0;
 		}
 		else if (nAddress == 0x22)
 		{
-			if (pExt)
+			if (pExt && np2oscfg.extsndout_fm)
 			{
 				pExt->WriteRegister(nAddress, cData);
 			}
@@ -403,14 +404,12 @@ static void writeRegister(POPNA opna, UINT nAddress, REG8 cData)
 					break;
 			}
 		}
-		if (!pExt)
-		{
-			opngen_setreg(&opna->opngen, 0, nAddress, cData);
-		}
-		else
+		if (pExt && np2oscfg.extsndout_fm)
 		{
 			pExt->WriteRegister(nAddress, cData);
 		}
+
+		opngen_setreg(&opna->opngen, 0, nAddress, cData);
 	}
 }
 
@@ -458,7 +457,7 @@ static void writeExtendedRegister(POPNA opna, UINT nAddress, REG8 cData)
 				}
 			}
 			adpcm_setreg(&opna->adpcm, nAddress, cData);
-			if ((pExt) && (pExt->HasADPCM()))
+			if ((pExt) && (pExt->HasADPCM()) && np2oscfg.extsndout_adpcm)
 			{
 				pExt->WriteRegister(nAddress + 0x100, cData);
 			}
@@ -488,14 +487,12 @@ static void writeExtendedRegister(POPNA opna, UINT nAddress, REG8 cData)
 						break;
 				}
 			}
-			if (!pExt)
-			{
-				opngen_setreg(&opna->opngen, 3, nAddress, cData);
-			}
-			else
+			if (pExt && np2oscfg.extsndout_fm)
 			{
 				pExt->WriteRegister(nAddress + 0x100, cData);
 			}
+
+			opngen_setreg(&opna->opngen, 3, nAddress, cData);
 		}
 	}
 }

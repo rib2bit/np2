@@ -602,7 +602,14 @@ static const PFTBL s_IniItems[] =
 	PFSTR("VSTiFile", PFRO_STR,			np2oscfg.szVSTiFile),
 #endif	// defined(SUPPORT_VSTi)
 
-	PFVAL("I286SAVE", PFRO_BOOL,		&np2oscfg.I286SAVE)
+	PFVAL("I286SAVE", PFRO_BOOL,		&np2oscfg.I286SAVE),
+
+	PFVAL("EXTSNDEN", PFTYPE_BOOL, &np2oscfg.extsndout),
+	PFVAL("EXTSNDFM", PFTYPE_BOOL, &np2oscfg.extsndout_fm),
+	PFVAL("EXTSNDSG", PFTYPE_BOOL, &np2oscfg.extsndout_ssg),
+	PFVAL("EXTSNDAP", PFTYPE_BOOL, &np2oscfg.extsndout_adpcm),
+	PFVAL("EXTSNDRT", PFTYPE_BOOL, &np2oscfg.extsndout_rhythm),
+	PFVAL("MUTE_INT", PFTYPE_BOOL, &np2oscfg.extsndout_muteint),
 };
 
 //! .ini Šg’£Žq

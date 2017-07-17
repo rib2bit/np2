@@ -107,8 +107,10 @@ static	TCHAR		szClassName[] = _T("NP2-MainWindow");
 						CSoundMng::kDSound3, TEXT(""),
 
 #if defined(SUPPORT_VSTi)
-						TEXT("%ProgramFiles%\\Roland\\Sound Canvas VA\\SOUND Canvas VA.dll")
+						TEXT("%ProgramFiles%\\Roland\\Sound Canvas VA\\SOUND Canvas VA.dll"),
 #endif	// defined(SUPPORT_VSTi)
+
+						0, 1, 1, 1, 1, 1
 					};
 
 		OEMCHAR		fddfolder[MAX_PATH];
@@ -886,6 +888,36 @@ static void OnCommand(HWND hWnd, WPARAM wParam)
 
 		case IDM_JASTSOUND:
 			np2oscfg.jastsnd = !np2oscfg.jastsnd;
+			update |= SYS_UPDATEOSCFG;
+			break;
+
+		case IDM_EXTSNDOUT:
+			np2oscfg.extsndout = !np2oscfg.extsndout;
+			update |= SYS_UPDATEOSCFG | SYS_UPDATESBOARD;
+			break;
+
+		case IDM_EXTSNDOUT_MUTEINT:
+			np2oscfg.extsndout_muteint= !np2oscfg.extsndout_muteint;
+			update |= SYS_UPDATEOSCFG;
+			break;
+
+		case IDM_EXTSNDOUT_FM:
+			np2oscfg.extsndout_fm = !np2oscfg.extsndout_fm;
+			update |= SYS_UPDATEOSCFG;
+			break;
+
+		case IDM_EXTSNDOUT_PSG:
+			np2oscfg.extsndout_ssg = !np2oscfg.extsndout_ssg;
+			update |= SYS_UPDATEOSCFG;
+			break;
+
+		case IDM_EXTSNDOUT_ADPCM:
+			np2oscfg.extsndout_adpcm = !np2oscfg.extsndout_adpcm;
+			update |= SYS_UPDATEOSCFG;
+			break;
+
+		case IDM_EXTSNDOUT_RHYTHM:
+			np2oscfg.extsndout_rhythm = !np2oscfg.extsndout_rhythm;
 			update |= SYS_UPDATEOSCFG;
 			break;
 
