@@ -286,7 +286,7 @@ void pccore_init(void)
  */
 void pccore_term(void)
 {
-	SNDCSEC_ENTER;
+	//SNDCSEC_ENTER;
 
 #if defined(SUPPORT_HOSTDRV)
 	hostdrv_deinitialize();
@@ -312,8 +312,8 @@ void pccore_term(void)
 
 	CPU_DEINITIALIZE();
 
-	SNDCSEC_LEAVE;
-	SNDCSEC_TERM;
+	//SNDCSEC_LEAVE;
+	//SNDCSEC_TERM;
 }
 
 
