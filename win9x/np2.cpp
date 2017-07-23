@@ -1171,6 +1171,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				case IDM_SCRNMUL10:
 				case IDM_SCRNMUL12:
 				case IDM_SCRNMUL16:
+				case IDM_SCRNMUL24:
 					if ((!scrnmng_isfullscreen()) &&
 						!(GetWindowLong(g_hWndMain, GWL_STYLE) & WS_MINIMIZE))
 					{

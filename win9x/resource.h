@@ -358,6 +358,7 @@
 #define IDM_SCRNMUL10                   40060
 #define IDM_SCRNMUL12                   40062
 #define IDM_SCRNMUL16                   40066
+#define IDM_SCRNMUL24                   40074
 #define IDM_RESET                       40101
 #define IDM_CONFIG                      40102
 #define IDM_NEWDISK                     40103

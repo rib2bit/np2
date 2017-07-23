@@ -744,6 +744,7 @@ BEGIN
     MENUITEM " 800x500",                    IDM_SCRNMUL10
     MENUITEM " 960x600",                    IDM_SCRNMUL12
     MENUITEM "1280x800",                    IDM_SCRNMUL16
+    MENUITEM "1920x1200",                   IDM_SCRNMUL24
     MENUITEM SEPARATOR
 END
 
