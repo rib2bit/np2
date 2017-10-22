@@ -80,6 +80,7 @@ RGB16 scrnmng_makepal16(RGB32 pal32);
 
 void scrnmng_setmultiple(int multiple);
 int scrnmng_getmultiple(void);
+void scrnmng_hqsratiochanged(UINT8, UINT8);
 void scrnmng_querypalette(void);
 void scrnmng_setdefaultres(void);
 void scrnmng_setfullscreen(BOOL fullscreen);

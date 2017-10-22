@@ -36,3 +36,24 @@ HQX_API void HQX_CALLCONV hqxInit(void)
         RGBtoYUV[c] = (y << 16) + (u << 8) + v;
     }
 }
+
+HQX_API void HQX_CALLCONV scaleHQX(uint32_t factor, const uint32_t* src, uint32_t* trg, uint32_t rowBytes)
+{
+    const auto srcWidth = 640;
+    const auto srcHeight = 480;
+
+    switch (factor)
+    {
+    case 2:
+        hq2x_32_rb(src, srcWidth * 4, trg, rowBytes, srcWidth, srcHeight);
+        break;
+    case 3:
+        hq3x_32_rb(src, srcWidth * 4, trg, rowBytes, srcWidth, srcHeight);
+        break;
+    case 4:
+        hq4x_32_rb(src, srcWidth * 4, trg, rowBytes, srcWidth, srcHeight);
+        break;
+    default:
+        break;
+    }
+}

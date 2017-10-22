@@ -6,12 +6,16 @@
 #include	"sdraw.h"
 #include	"dispsync.h"
 #include	"palettes.h"
+#include	"hqx/hqx.h"
+#include	"xbrz/xbrzscaler.h"
 
 
 	UINT8	renewal_line[SURFACE_HEIGHT];
 	UINT8	np2_tram[SURFACE_SIZE];
 	UINT8	np2_vram[2][SURFACE_SIZE];
 
+
+	UINT32	surf_buff[SURFACE_SIZE];
 
 static void updateallline(UINT32 update) {
 
@@ -179,7 +183,8 @@ const SDRAWFN	*sdrawfn;
 			renewal_line[i] &= ~bit;
 		}
 	}
-	height = surf->height;
+	UINT8 ratio = surf->bpp == 32 && (np2cfg.hqs_ratio & 0xF)  > 1 ? (np2cfg.hqs_ratio & 0xF) : 1;	// hqx supports only 32bit mode
+	height = surf->height / ratio;
 	do {
 #if defined(SUPPORT_PC9821)
 		if (gdc.analog & 2) {
@@ -228,18 +233,33 @@ const SDRAWFN	*sdrawfn;
 			sdraw.src2 = np2_tram;
 			break;
 	}
-	sdraw.dst = surf->ptr;
-	sdraw.width = surf->width;
-	sdraw.xbytes = surf->xalign * surf->width;
-	sdraw.y = 0;
-	sdraw.xalign = surf->xalign;
-	sdraw.yalign = surf->yalign;
+	if (ratio > 1 && ratio <= 4)
+	{
+		sdraw.dst = (UINT8*)surf_buff;
+		sdraw.width = SURFACE_WIDTH;
+		sdraw.xbytes = 4 * SURFACE_WIDTH;
+		sdraw.y = 0;
+		sdraw.xalign = 4;
+		sdraw.yalign = 4 * SURFACE_WIDTH;
+	}
+	else
+	{
+		sdraw.dst = surf->ptr;
+		sdraw.width = surf->width;
+		sdraw.xbytes = surf->xalign * surf->width;
+		sdraw.y = 0;
+		sdraw.xalign = surf->xalign;
+		sdraw.yalign = surf->yalign;
+	}
+
 	if (((gdc.analog & 3) != 1) || (palevent.events >= PALEVENTMAX)) {
 		(*(*sdrawfn))(&sdraw, height);
 	}
 	else {
 		ret = rasterdraw(*sdrawfn, &sdraw, height);
 	}
+	
+	scaleHQX(ratio, surf_buff, (UINT32*)surf->ptr, surf->yalign);
 
 sddr_exit2:
 	scrnmng_surfunlock(surf);

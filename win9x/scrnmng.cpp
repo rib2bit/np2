@@ -78,6 +78,15 @@ static	DDRAW		ddraw;
 static	SCRNSTAT	scrnstat;
 static	SCRNSURF	scrnsurf;
 
+static int get_hqsratio()
+{
+	return (np2cfg.hqs_ratio & 0xF) > 1 && scrnsurf.bpp == 32 ? (np2cfg.hqs_ratio & 0xF) : 1;
+}
+
+static int get_scrnstat_multiple()
+{
+	return scrnstat.multiple * get_hqsratio();
+}
 
 static void setwindowsize(HWND hWnd, int width, int height)
 {
@@ -150,8 +159,8 @@ static void renewalclientsize(BOOL winloc) {
 	int			tmpcy;
 	WINLOCEX	wlex;
 
-	width = min(scrnstat.width, ddraw.width);
-	height = min(scrnstat.height, ddraw.height);
+	width = min(scrnstat.width, ddraw.width) * get_hqsratio();
+	height = min(scrnstat.height, ddraw.height) * get_hqsratio();
 	extend = 0;
 
 	// •`‰æ”ÍˆÍ`
@@ -579,25 +588,26 @@ BRESULT scrnmng_create(UINT8 scrnmode) {
 			goto scre_err;
 		}
 
+		scrnsurf.bpp = bitcolor = ddpf.dwRGBBitCount;
+		int ratio = get_hqsratio();
 		ZeroMemory(&ddsd, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
 		ddsd.dwFlags = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT;
 		ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
 		if (!(scrnmode & SCRNMODE_ROTATE)) {
-			ddsd.dwWidth = 640 + 1;
-			ddsd.dwHeight = 480;
+			ddsd.dwWidth = 640 * ratio + 1;
+			ddsd.dwHeight = 480 * ratio;
 		}
 		else {
-			ddsd.dwWidth = 480;
-			ddsd.dwHeight = 640 + 1;
+			ddsd.dwWidth = 480 * ratio;
+			ddsd.dwHeight = 640 * ratio + 1;
 		}
-		width = 640;
-		height = 480;
+		width = 640 * ratio;
+		height = 480 * ratio;
 
 		if (ddraw2->CreateSurface(&ddsd, &ddraw.backsurf, NULL) != DD_OK) {
 			goto scre_err;
 		}
-		bitcolor = ddpf.dwRGBBitCount;
 		if (bitcolor == 8) {
 			paletteinit();
 		}
@@ -870,6 +880,7 @@ void scrnmng_update(void) {
 
 void scrnmng_setmultiple(int multiple)
 {
+	multiple /= get_hqsratio();
 	if (scrnstat.multiple != multiple)
 	{
 		scrnstat.multiple = multiple;
@@ -879,9 +890,15 @@ void scrnmng_setmultiple(int multiple)
 
 int scrnmng_getmultiple(void)
 {
-	return scrnstat.multiple;
+	return get_scrnstat_multiple();
 }
 
+void scrnmng_hqsratiochanged(UINT8 prv, UINT8 cur)
+{
+	prv = prv == 0 ? 1 : prv;
+	cur = cur == 0 ? 1 : cur;
+	scrnstat.multiple = (scrnstat.multiple * prv) / cur;
+}
 
 
 // ----
@@ -989,7 +1006,7 @@ void scrnmng_entersizing(void) {
 		scrnsizing.cx = cy;
 		scrnsizing.cy = cx;
 	}
-	scrnsizing.mul = scrnstat.multiple;
+	scrnsizing.mul = get_scrnstat_multiple();
 }
 
 void scrnmng_sizing(UINT side, RECT *rect) {

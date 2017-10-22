@@ -220,6 +220,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ソース ファイル\hqx">
+      <UniqueIdentifier>{a729d33b-3e0b-4947-a3ce-2fd257ec1446}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\hqx">
+      <UniqueIdentifier>{476a1796-9ad1-4d81-ab5d-ea2eb19b7a50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\calendar.c">
@@ -1095,6 +1101,18 @@
     <ClCompile Include="..\zlib\zutil.c">
       <Filter>ソース ファイル\zlib</Filter>
     </ClCompile>
+    <ClCompile Include="..\hqx\hq2x.c">
+      <Filter>ソース ファイル\hqx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hqx\hq3x.c">
+      <Filter>ソース ファイル\hqx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hqx\hq4x.c">
+      <Filter>ソース ファイル\hqx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hqx\hqxscaler.c">
+      <Filter>ソース ファイル\hqx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\calendar.h">
@@ -1915,6 +1933,12 @@
     </ClInclude>
     <ClInclude Include="..\zlib\zutil.h">
       <Filter>ヘッダー ファイル\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hqx\common.h">
+      <Filter>ヘッダー ファイル\hqx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hqx\hqx.h">
+      <Filter>ヘッダー ファイル\hqx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

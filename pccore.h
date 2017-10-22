@@ -86,6 +86,7 @@ struct tagNP2Config
 	UINT8	calendar;
 	UINT8	usefd144;
 	UINT8	wait[6];
+	UINT8	hqs_ratio;
 
 	// リセット時とかあんまり参照されない奴
 	OEMCHAR	model[8];

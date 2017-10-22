@@ -137,10 +137,11 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\;.\x86;..\;..\common;..\i286x;..\mem;..\io;..\cbus;..\vram;..\sound;..\generic;..\zlib</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -512,6 +513,10 @@
     <ClCompile Include="ext\romeo\juliet.cpp" />
     <ClCompile Include="ext\scci\scciif.cpp" />
     <ClCompile Include="fontmng.cpp" />
+    <ClCompile Include="..\hqx\hq2x.c" />
+    <ClCompile Include="..\hqx\hq3x.c" />
+    <ClCompile Include="..\hqx\hq4x.c" />
+    <ClCompile Include="..\hqx\hqxscaler.c" />
     <ClCompile Include="ini.cpp" />
     <ClCompile Include="joymng.cpp" />
     <ClCompile Include="menu.cpp" />
@@ -763,6 +768,8 @@
     <ClInclude Include="ext\scci\SCCIDefines.h" />
     <ClInclude Include="ext\scci\scciif.h" />
     <ClInclude Include="fontmng.h" />
+    <ClInclude Include="..\hqx\common.h" />
+    <ClInclude Include="..\hqx\hqx.h" />
     <ClInclude Include="ini.h" />
     <ClInclude Include="joymng.h" />
     <ClInclude Include="menu.h" />

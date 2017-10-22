@@ -67,6 +67,7 @@
 #include "subwnd\dclock.h"
 #endif
 #include "recvideo.h"
+#include "hqx/hqx.h"
 
 #ifdef BETA_RELEASE
 #define		OPENING_WAIT		1500
@@ -1179,6 +1180,36 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					}
 					break;
 
+				case IDM_HQ2X:
+				case IDM_HQ3X:
+				case IDM_HQ4X:
+				case IDM_BZ2X:
+				case IDM_BZ3X:
+				case IDM_BZ4X:
+					if ((int)(wParam - IDM_HQS) == np2cfg.hqs_ratio)
+					{
+						scrnmng_hqsratiochanged(np2cfg.hqs_ratio & 0xF, 1);
+						np2cfg.hqs_ratio = 0;
+					}
+					else if (((int)(wParam - IDM_HQS) & 0xF) == (np2cfg.hqs_ratio & 0xF))
+					{
+						np2cfg.hqs_ratio = (int)(wParam - IDM_HQS);
+					}
+					else
+					{
+						UINT8 cur = (int)(wParam - IDM_HQS);
+						scrnmng_hqsratiochanged(np2cfg.hqs_ratio & 0xF, cur & 0xF);
+						np2cfg.hqs_ratio = cur;
+					}
+					update |= SYS_UPDATEOSCFG;
+					scrnmng_destroy();
+					if (scrnmng_create(g_scrnmode) != SUCCESS) {
+						PostQuitMessage(0);
+						break;
+					}
+					scrndraw_redraw();
+					break;
+
 				case SC_MINIMIZE:
 					wlex = np2_winlocexallwin(hWnd);
 					winlocex_close(wlex);
@@ -1569,7 +1600,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 	UINT32		tick;
 #endif
 	BOOL		xrollkey;
-
+	hqxInit();
 	_MEM_INIT();
 	CWndProc::Initialize(hInstance);
 	CSubWndBase::Initialize(hInstance);

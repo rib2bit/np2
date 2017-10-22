@@ -274,6 +274,10 @@
     <ClCompile Include="..\generic\np2info.c" />
     <ClCompile Include="..\generic\softkbd.c" />
     <ClCompile Include="..\generic\unasm.c" />
+    <ClCompile Include="..\hqx\hq2x.c" />
+    <ClCompile Include="..\hqx\hq3x.c" />
+    <ClCompile Include="..\hqx\hq4x.c" />
+    <ClCompile Include="..\hqx\hqxscaler.c" />
     <ClCompile Include="..\i386c\cpucore.c" />
     <ClCompile Include="..\i386c\cpumem.c" />
     <ClCompile Include="..\i386c\ia32\cpu.c" />
@@ -562,6 +566,8 @@
     <ClInclude Include="..\generic\np2info.h" />
     <ClInclude Include="..\generic\softkbd.h" />
     <ClInclude Include="..\generic\unasm.h" />
+    <ClInclude Include="..\hqx\common.h" />
+    <ClInclude Include="..\hqx\hqx.h" />
     <ClInclude Include="..\i386c\cpucore.h" />
     <ClInclude Include="..\i386c\cpumem.h" />
     <ClInclude Include="..\i386c\ia32\cpu.h" />

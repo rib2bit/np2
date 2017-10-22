@@ -746,6 +746,10 @@ BEGIN
     MENUITEM "1280x800",                    IDM_SCRNMUL16
     MENUITEM "1920x1200",                   IDM_SCRNMUL24
     MENUITEM SEPARATOR
+    MENUITEM "hq2x",                        IDM_HQ2X
+    MENUITEM "hq3x",                        IDM_HQ3X
+    MENUITEM "hq4x",                        IDM_HQ4X
+    MENUITEM SEPARATOR
 END
 
 IDR_SYSKEYDISP MENU DISCARDABLE 

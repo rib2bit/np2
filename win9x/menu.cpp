@@ -238,6 +238,11 @@ void sysmenu_update(HMENU hMenu)
 	CheckMenuItem(hMenu, IDM_SCRNMUL12, MF_BYCOMMAND | MFCHECK(scrnmul == 12));
 	CheckMenuItem(hMenu, IDM_SCRNMUL16, MF_BYCOMMAND | MFCHECK(scrnmul == 16));
 	CheckMenuItem(hMenu, IDM_SCRNMUL24, MF_BYCOMMAND | MFCHECK(scrnmul == 24));
+
+	const int hqsratio = np2cfg.hqs_ratio;
+	CheckMenuItem(hMenu, IDM_HQ2X, MF_BYCOMMAND | MFCHECK(hqsratio == 2));
+	CheckMenuItem(hMenu, IDM_HQ3X, MF_BYCOMMAND | MFCHECK(hqsratio == 3));
+	CheckMenuItem(hMenu, IDM_HQ4X, MF_BYCOMMAND | MFCHECK(hqsratio == 4));
 }
 
 

@@ -534,6 +534,10 @@
 #define IDM_EXTSNDOUT_ADPCM             55012
 #define IDM_EXTSNDOUT_RHYTHM            55013
 #define IDM_EXTSNDOUT_MUTEINT           55001
+#define IDM_HQS                         55020
+#define IDM_HQ2X                        55022
+#define IDM_HQ3X                        55023
+#define IDM_HQ4X                        55024
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
