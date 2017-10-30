@@ -259,8 +259,19 @@ const SDRAWFN	*sdrawfn;
 		ret = rasterdraw(*sdrawfn, &sdraw, height);
 	}
 	
-	scaleHQX(ratio, surf_buff, (UINT32*)surf->ptr, surf->yalign);
-
+	UINT8 scale_type = np2cfg.hqs_ratio & ~0xF;
+	switch (scale_type)
+	{
+		case 0x00:
+			scaleHQX(ratio, surf_buff, (UINT32*)surf->ptr, surf->yalign);
+			break;
+		case 0x10:
+			scaleXBRZ(ratio, surf_buff, (UINT32*)surf->ptr, surf->yalign);
+			break;
+		default:
+			break;
+	}
+	
 sddr_exit2:
 	scrnmng_surfunlock(surf);
 

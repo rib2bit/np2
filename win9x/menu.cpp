@@ -243,6 +243,9 @@ void sysmenu_update(HMENU hMenu)
 	CheckMenuItem(hMenu, IDM_HQ2X, MF_BYCOMMAND | MFCHECK(hqsratio == 2));
 	CheckMenuItem(hMenu, IDM_HQ3X, MF_BYCOMMAND | MFCHECK(hqsratio == 3));
 	CheckMenuItem(hMenu, IDM_HQ4X, MF_BYCOMMAND | MFCHECK(hqsratio == 4));
+	CheckMenuItem(hMenu, IDM_BZ2X, MF_BYCOMMAND | MFCHECK(hqsratio == 2 + 0x10));
+	CheckMenuItem(hMenu, IDM_BZ3X, MF_BYCOMMAND | MFCHECK(hqsratio == 3 + 0x10));
+	CheckMenuItem(hMenu, IDM_BZ4X, MF_BYCOMMAND | MFCHECK(hqsratio == 4 + 0x10));
 }
 
 

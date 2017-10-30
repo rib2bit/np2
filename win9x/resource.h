@@ -538,6 +538,9 @@
 #define IDM_HQ2X                        55022
 #define IDM_HQ3X                        55023
 #define IDM_HQ4X                        55024
+#define IDM_BZ2X                        55038
+#define IDM_BZ3X                        55039
+#define IDM_BZ4X                        55040
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

@@ -749,6 +749,9 @@ BEGIN
     MENUITEM "hq2x",                        IDM_HQ2X
     MENUITEM "hq3x",                        IDM_HQ3X
     MENUITEM "hq4x",                        IDM_HQ4X
+    MENUITEM "2xBRZ",                       IDM_BZ2X
+    MENUITEM "3xBRZ",                       IDM_BZ3X
+    MENUITEM "4xBRZ",                       IDM_BZ4X
     MENUITEM SEPARATOR
 END
 

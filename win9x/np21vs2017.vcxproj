@@ -406,6 +406,8 @@
     <ClCompile Include="..\vram\sdraw.c" />
     <ClCompile Include="..\vram\sdrawq16.c" />
     <ClCompile Include="..\vram\vram.c" />
+    <ClCompile Include="..\xbrz\xbrz.cpp" />
+    <ClCompile Include="..\xbrz\xbrzscaler.cpp" />
     <ClCompile Include="..\zlib\adler32.c" />
     <ClCompile Include="..\zlib\crc32.c" />
     <ClCompile Include="..\zlib\inffast.c" />
@@ -677,6 +679,9 @@
     <ClInclude Include="..\vram\scrnsave.h" />
     <ClInclude Include="..\vram\sdraw.h" />
     <ClInclude Include="..\vram\vram.h" />
+    <ClInclude Include="..\xbrz\config.h" />
+    <ClInclude Include="..\xbrz\xbrz.h" />
+    <ClInclude Include="..\xbrz\xbrzscaler.h" />
     <ClInclude Include="..\zlib\crc32.h" />
     <ClInclude Include="..\zlib\inffast.h" />
     <ClInclude Include="..\zlib\inffixed.h" />

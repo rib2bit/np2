@@ -226,6 +226,12 @@
     <Filter Include="ヘッダー ファイル\hqx">
       <UniqueIdentifier>{476a1796-9ad1-4d81-ab5d-ea2eb19b7a50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\xbrz">
+      <UniqueIdentifier>{4729ae55-4565-487b-ac1b-bba87bdf2881}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\xbrz">
+      <UniqueIdentifier>{a29b1900-a622-4d56-8efe-c52654952cb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\calendar.c">
@@ -1113,6 +1119,12 @@
     <ClCompile Include="..\hqx\hqxscaler.c">
       <Filter>ソース ファイル\hqx</Filter>
     </ClCompile>
+    <ClCompile Include="..\xbrz\xbrz.cpp">
+      <Filter>ソース ファイル\xbrz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\xbrz\xbrzscaler.cpp">
+      <Filter>ソース ファイル\xbrz</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\calendar.h">
@@ -1939,6 +1951,15 @@
     </ClInclude>
     <ClInclude Include="..\hqx\hqx.h">
       <Filter>ヘッダー ファイル\hqx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\xbrz\config.h">
+      <Filter>ヘッダー ファイル\xbrz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\xbrz\xbrz.h">
+      <Filter>ヘッダー ファイル\xbrz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\xbrz\xbrzscaler.h">
+      <Filter>ヘッダー ファイル\xbrz</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
