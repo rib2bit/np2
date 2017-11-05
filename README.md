@@ -12,3 +12,12 @@ clone from svn: http://amethyst.yui.ne.jp/svn/pc98/np2/
 
 [master](https://github.com/rib2bit/np2/)
 :   private small changes
+
+# Modifications
+
+*   Add external sound chip settings
+*   Add 1920x1200 window size
+*   Add pixel-art scaling filters
+    *   [hqx](https://web.archive.org/web/20131205091805/http://www.hiend3d.com/hq2x.html)
+    *   [xBRZ](https://sourceforge.net/projects/xbrz/)
+
